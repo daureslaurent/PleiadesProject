@@ -21,6 +21,7 @@
     "bunyan": "^1.8.12",
     "express": "^4.17.0",
     "express-session": "^1.16.1",
-    "mongoose": "^5.5.11"
+    "mongoose": "^5.5.11",
+    "mqtt": "^3.0.0"
   }
 }

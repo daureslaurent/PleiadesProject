@@ -13,7 +13,7 @@ var log = bunyan.createLogger({ name: 'Pleiades-server' });
 //Init db (MongoDB)
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-var promise = mongoose.connect(config.mongoHost, { useMongoClient: true });
+mongoose.connect(config.mongoHost);
 
 // Check MongoDB connect
 var db = mongoose.connection;
@@ -39,8 +39,15 @@ app.use(function(req, res, next) {
 //LoadModel DB
 var LightModel = require('./api/models/lightModel');
 
+//Load MQTT
+var MqttPleiades = require('./api/mqtt/MqttPleiades');
+var clientMqtt = MqttPleiades.createClient();
+
 //LoadController
+var RoutesManager = require('./api/routes/RoutesManager');
+app.use('/api', RoutesManager.setRouter(express.Router(), MqttPleiades));
 
 //Load routes server
 
 app.listen(config.serverPort);
+console.log('server listen on ' + config.serverPort);

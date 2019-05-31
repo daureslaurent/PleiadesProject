@@ -7,6 +7,9 @@ var LightSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	deviceId: {
+		type: String
+	},
 	power: Boolean,
 	connected: {
 		type: Boolean
@@ -28,4 +31,4 @@ var LightSchema = new mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model('Player', PlayerSchema);
+module.exports = mongoose.model('Light', LightSchema);
