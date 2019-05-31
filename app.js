@@ -11,6 +11,16 @@ var bunyan = require('bunyan');
 var log = bunyan.createLogger({ name: 'Pleiades-server' });
 
 //Init db (MongoDB)
+var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+var promise = mongoose.connect(config.mongoHost, { useMongoClient: true });
+
+// Check MongoDB connect
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	console.log('db OK');
+});
 
 //midleWare
 app.use(express.static('public'));
@@ -27,6 +37,7 @@ app.use(function(req, res, next) {
 });
 
 //LoadModel DB
+var LightModel = require('./api/models/lightModel');
 
 //LoadController
 

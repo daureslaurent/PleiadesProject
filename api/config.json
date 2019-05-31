@@ -1,4 +1,5 @@
 {
 	"serverPort": 8010,
-	"keySession": "cGxlaWFkZXM="
+	"keySession": "cGxlaWFkZXM=",
+	"mongoHost": "mongodb://127.0.0.1/pleiades"
 }
