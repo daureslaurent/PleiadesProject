@@ -1,0 +1,18 @@
+<div class="container">
+  <div *ngIf="listLight" class="row">
+    <div *ngFor="let listLight of listLight" class="lightcard col-md-12 col-lg-6">
+      <div class="card" [ngClass]="(listLight.connected==true)?'border-success':'border-danger'">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ listLight.name }} 
+            <span class="badge" [ngClass]="(listLight.connected==true)?'badge-success':'badge-secondary'">{{listLight.connected ? 'ON' : 'OFF'}}</span>
+          </h5>
+          <hr>
+          {{listLight.id}}
+          <hr>
+          <a [routerLink]="['/board', listLight.id]" class="btn btn-primary">Drive</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
