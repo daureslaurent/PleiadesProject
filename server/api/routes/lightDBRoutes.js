@@ -1,15 +1,17 @@
 'use strict';
 
+const MapLight = require('../mapping/LightReduced');
+const MapLightList = require('../mapping/LightList');
 var log = require('../utils/log').getLog('lightDBRoutes');
 
 module.exports = function() {
 	var routesList = new Array();
 	var LightController = require('../controllers/LightController');
 
-	var _funcGetListLight = function(req, res) {
+	var _funcGetListLight = (req, res) => {
 		LightController.getListLight()
 			.then((dataList) => {
-				res.status(200).send(dataList);
+				res.status(200).send(MapLightList(dataList));
 			})
 			.catch((err) => {
 				log.error('get_list_light', err.message);
@@ -24,11 +26,9 @@ module.exports = function() {
 
 	var _funcGetLightId = function(req, res) {
 		var id = req.params.id;
-		log.info('id', id);
 		LightController.getLightId(id)
 			.then((data) => {
-				log.info({ data: data });
-				res.status(200).send(data);
+				res.status(200).send(MapLight(data));
 			})
 			.catch((err) => {
 				log.error('get_light/[' + id + ']', err.message);

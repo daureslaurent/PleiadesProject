@@ -14,16 +14,14 @@ exports.cmdParser = function() {
 
 exports.exec = function(msgData, mqttClient) {
 	//Find device with DeviceID
-	var did = '32-0498';
+	var did = msgData.serialId;
 
 	lightController
 		.getLightDeviceId(did)
 		.then((data) => {
 			if (data) {
-				log.info('client [' + data.name + ']', data);
-
 				//send data from base to lamp
-				senderMQTT.sendBrightness(data.id, value, mqttClient);
+				senderMQTT.sendBrightness(data.id, data.brightness, mqttClient);
 
 				var color = {
 					r: data.color.r,
@@ -33,7 +31,7 @@ exports.exec = function(msgData, mqttClient) {
 				senderMQTT.sendColor(data.id, color, mqttClient);
 				log.info('setMe OK');
 			} else {
-				log.error('Light not found !');
+				log.error('Light not found !', did);
 			}
 		})
 		.catch((e) => {

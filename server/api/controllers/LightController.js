@@ -101,3 +101,17 @@ exports.createUpdateFromIdent = function(identData) {
 		}
 	});
 };
+
+exports.updateTimeUp = function(serial) {
+	return new Promise((resolve, reject) => {
+		var now = Date.now();
+		LightDB.update({ deviceId: serial }, { $set: { lastUpTime: now } })
+			.exec()
+			.then((data) => {
+				resolve();
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+};

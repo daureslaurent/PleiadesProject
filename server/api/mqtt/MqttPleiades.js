@@ -3,6 +3,8 @@ const mqtt = require('mqtt');
 //const rgbHex = require('rgb-hex');
 const config = require('../config');
 const senderMQQT = require('./MqttSender');
+const LightController = require('../controllers/LightController');
+const UpdateStatus = require('../utils/UpdateStatus');
 var log = require('../utils/log').getLog('MqttPleiades');
 var client;
 
@@ -33,15 +35,18 @@ exports.createClient = function() {
 	});
 
 	client.on('message', function(topic, message) {
-		log.info('msg MQTT', topic, message);
+		//log.info('msg MQTT', topic);
 		if (topicServer === topic) {
 			try {
 				var data = JSON.parse(message);
 				cmdList.forEach((element) => {
 					if (data.cmd === element.cmdParser()) {
-						element.exec(data);
+						log.info('[' + data.cmd + ']:[' + data.name + '][' + data.serialId + ']');
+						element.exec(data, client);
 					}
 				});
+				//Update state {conected} of device
+				LightController.updateTimeUp(data.serialId);
 			} catch (e) {
 				log.error(e);
 			}
@@ -50,8 +55,12 @@ exports.createClient = function() {
 
 	var functAutoSendIdent = function() {
 		senderMQQT.sendIdent(client);
+		setTimeout(() => {
+			UpdateStatus.updateStatus();
+			log.info('Update Status');
+		}, 3 * 1000);
 	};
-	//setInterval(functAutoSendIdent, 3 * 1000);
+	setInterval(functAutoSendIdent, 10 * 1000);
 
 	return client;
 };

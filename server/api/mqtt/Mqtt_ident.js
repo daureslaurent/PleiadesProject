@@ -8,8 +8,6 @@ exports.cmdParser = function() {
 };
 
 exports.exec = function(data, mqttClient) {
-	log.info('ident[' + data.name + '][' + data.serialId + ']');
-
 	//Update / Create device in DB
 	lightController.createUpdateFromIdent(data);
 };
