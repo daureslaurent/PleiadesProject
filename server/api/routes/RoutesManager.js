@@ -1,12 +1,14 @@
 'use strict';
 
-const routesLights = require('./lightRoutes');
+const routesCtrlLights = require('./lightCtrlRoutes');
+const routesDBLights = require('./lightDBRoutes');
 
 exports.setRouter = function(router, mqttClient) {
 	var routes = new Array();
 
 	//Import routes
-	routes = routes.concat(routesLights(mqttClient));
+	routes = routes.concat(routesCtrlLights(mqttClient));
+	routes = routes.concat(routesDBLights());
 
 	//Set listRoutes in express
 	routes.forEach((element) => {

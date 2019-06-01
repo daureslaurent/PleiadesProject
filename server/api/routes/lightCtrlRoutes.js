@@ -1,6 +1,6 @@
 'use strict';
 
-var log = require('../utils/log').getLog('lightRoutes');
+var log = require('../utils/log').getLog('lightCtrlRoutes');
 
 module.exports = function(mqttClient) {
 	var routesList = new Array();

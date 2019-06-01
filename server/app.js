@@ -44,10 +44,10 @@ var MqttPleiades = require('./api/mqtt/MqttPleiades');
 var clientMqtt = MqttPleiades.createClient();
 
 //LoadController
-var RoutesManager = require('./api/routes/RoutesManager');
-app.use('/api', RoutesManager.setRouter(express.Router(), MqttPleiades));
 
 //Load routes server
+var RoutesManager = require('./api/routes/RoutesManager');
+app.use('/api', RoutesManager.setRouter(express.Router(), MqttPleiades));
 
 app.listen(config.serverPort);
 console.log('server listen on ' + config.serverPort);
