@@ -1,9 +1,7 @@
 'use strict';
 
-module.exports = function(rawData) {
-	//final obj
-
-	/*
+/* == RAW DATA ==*/
+/*
     "__v": 0,
     "_id": "5cf1efe21b7cff4eece1992f",
     "brightness": 15,
@@ -17,12 +15,25 @@ module.exports = function(rawData) {
         "r": 0
     }
     */
+
+exports.mappingOne = function(rawData) {
 	var final = {
 		id: rawData._id,
 		name: rawData.name,
 		brightness: rawData.brightness,
 		connected: rawData.connected,
 		deviceId: rawData.deviceId,
+		color: rawData.color
+	};
+
+	return final;
+};
+
+exports.mappingList = function(rawData) {
+	var final = {
+		id: rawData._id,
+		name: rawData.name,
+		connected: rawData.connected,
 		color: rawData.color
 	};
 

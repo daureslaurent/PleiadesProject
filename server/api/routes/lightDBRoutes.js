@@ -28,7 +28,7 @@ module.exports = function() {
 		var id = req.params.id;
 		LightController.getLightId(id)
 			.then((data) => {
-				res.status(200).send(MapLight(data));
+				res.status(200).send(MapLight.mappingOne(data));
 			})
 			.catch((err) => {
 				log.error('get_light/[' + id + ']', err.message);

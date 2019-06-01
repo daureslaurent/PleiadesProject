@@ -5,7 +5,7 @@ module.exports = function(rawList) {
 	var final = new Array();
 
 	rawList.forEach((element) => {
-		final.push(LightReduced(element));
+		final.push(LightReduced.mappingList(element));
 	});
 
 	return final;
