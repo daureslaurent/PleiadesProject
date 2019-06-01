@@ -13,3 +13,7 @@ exports.sendBrightness = function(id, brightness, mqtt) {
 		mqtt.publish('ledlamp/json', JSON.stringify(jsonData));
 	}
 };
+
+exports.sendIdent = function(mqtt) {
+	mqtt.publish('ledlamp/set', 'ident');
+};

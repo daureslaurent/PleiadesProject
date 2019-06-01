@@ -1,6 +1,7 @@
 'use strict';
 var mongoose = require('mongoose');
 var LightDB = mongoose.model('Light');
+var log = require('../utils/log').getLog('lightController');
 
 exports.getListLight = function() {
 	return new Promise((resolve, reject) => {
@@ -33,7 +34,7 @@ exports.getLightDeviceId = function(id) {
 		LightDB.find({ deviceId: id })
 			.exec()
 			.then((data) => {
-				resolve(data);
+				resolve(data[0]);
 			})
 			.catch((err) => {
 				reject(err);
@@ -74,7 +75,7 @@ exports.createUpdateFromIdent = function(identData) {
 	// find an existing Light with same deviceId
 	LightDB.findOne({ deviceId: serialId }, function(err, light) {
 		if (err) {
-			console.log('Err update_Light_from_ident: ' + err);
+			log.error('update_Light_from_ident', err);
 		}
 		if (light) {
 			//Update Light
@@ -85,7 +86,7 @@ exports.createUpdateFromIdent = function(identData) {
 			light.save(function(err, light) {});
 		} else {
 			// New Light
-			console.log('Create new light ' + identData.name);
+			log.info('Create new light', identData);
 			var newLight = new LightDB();
 			newLight.name = identData.name;
 			newLight.deviceId = serialId;
@@ -94,8 +95,8 @@ exports.createUpdateFromIdent = function(identData) {
 			newLight.lastUpTime = Date.now();
 
 			newLight.save(function(err, Light) {
-				if (err) console.log('Err create new Light: ' + err);
-				console.log('create new Light OK: ' + Light.name);
+				if (err) log.error('Err create new Light', err);
+				log.info('create new Light OK', Light.name);
 			});
 		}
 	});

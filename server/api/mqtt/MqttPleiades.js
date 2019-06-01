@@ -3,6 +3,7 @@ const mqtt = require('mqtt');
 //const rgbHex = require('rgb-hex');
 const config = require('../config');
 const senderMQQT = require('./MqttSender');
+var log = require('../utils/log').getLog('MqttPleiades');
 var client;
 
 exports.sendColor = function(id, color) {
@@ -20,6 +21,7 @@ exports.createClient = function() {
 	//CMD MQTT
 	var cmdList = new Array();
 	cmdList.push(require('./Mqtt_ident'));
+	cmdList.push(require('./Mqtt_setme'));
 
 	client = mqtt.connect(config.MQTTBroker);
 
@@ -27,10 +29,11 @@ exports.createClient = function() {
 		//Subscribe topic
 		client.subscribe(topicServer);
 		client.subscribe(topicControl);
+		log.info('connected & subscribe');
 	});
 
 	client.on('message', function(topic, message) {
-		console.log(topic, message);
+		log.info('msg MQTT', topic, message);
 		if (topicServer === topic) {
 			try {
 				var data = JSON.parse(message);
@@ -40,9 +43,15 @@ exports.createClient = function() {
 					}
 				});
 			} catch (e) {
-				console.error(e);
+				log.error(e);
 			}
-		} else console.log('topic: ' + topic + ' msg: ' + message.toString());
+		}
 	});
+
+	var functAutoSendIdent = function() {
+		senderMQQT.sendIdent(client);
+	};
+	//setInterval(functAutoSendIdent, 3 * 1000);
+
 	return client;
 };

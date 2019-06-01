@@ -18,7 +18,7 @@ module.exports = function(mqttClient) {
 				res.status(204).send();
 			})
 			.catch((err) => {
-				console.log('err');
+				log.error('set_color', err.message);
 				res.status(500).send();
 			});
 	};
@@ -40,7 +40,7 @@ module.exports = function(mqttClient) {
 				res.status(204).send();
 			})
 			.catch((err) => {
-				console.log('err');
+				log.error('set_brightness', err.message);
 				res.status(500).send();
 			});
 	};

@@ -1,0 +1,4 @@
+SETME
+{"serialId": "PR0","cmd": "setMe","name": "PLEIADES-PR01","led": {  "color": {"r":0,"g": 255,"b": 255}}}
+IDENT
+{"serialId": "PR0","cmd": "ident","name": "PLEIADES-PR01","led": {  "color": {"r":0,"g": 255,"b": 255}}}

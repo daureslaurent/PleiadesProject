@@ -2,6 +2,7 @@
 
 const routesCtrlLights = require('./lightCtrlRoutes');
 const routesDBLights = require('./lightDBRoutes');
+var log = require('../utils/log').getLog('RoutesManager');
 
 exports.setRouter = function(router, mqttClient) {
 	var routes = new Array();
@@ -12,7 +13,7 @@ exports.setRouter = function(router, mqttClient) {
 
 	//Set listRoutes in express
 	routes.forEach((element) => {
-		console.log('routes [' + element.mode + '][' + element.path + ']');
+		log.info('routes [' + element.mode + '][api/' + element.path + ']');
 		router[element.mode]('/' + element.path, element.funct);
 	});
 

@@ -8,18 +8,20 @@ var session = require('express-session');
 var config = require('./api/config.json');
 //Init log {bunyan}
 var bunyan = require('bunyan');
-var log = bunyan.createLogger({ name: 'Pleiades-server' });
+var log = bunyan.createLogger({ name: config.logName });
 
 //Init db (MongoDB)
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-mongoose.connect(config.mongoHost);
+mongoose.connect(config.mongoHost, { useMongoClient: true });
 
 // Check MongoDB connect
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', (err) => {
+	log.error('err mongoDB', err);
+});
 db.once('open', function() {
-	console.log('db OK');
+	log.info('MongoDB OK');
 });
 
 //midleWare
@@ -50,4 +52,4 @@ var RoutesManager = require('./api/routes/RoutesManager');
 app.use('/api', RoutesManager.setRouter(express.Router(), MqttPleiades));
 
 app.listen(config.serverPort);
-console.log('server listen on ' + config.serverPort);
+log.info('server listen on port ' + config.serverPort);

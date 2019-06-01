@@ -4,7 +4,6 @@ var log = require('../utils/log').getLog('lightDBRoutes');
 
 module.exports = function() {
 	var routesList = new Array();
-
 	var LightController = require('../controllers/LightController');
 
 	var _funcGetListLight = function(req, res) {
@@ -13,7 +12,7 @@ module.exports = function() {
 				res.status(200).send(dataList);
 			})
 			.catch((err) => {
-				console.log('err getListLight [' + err + ']');
+				log.error('get_list_light', err.message);
 				res.status(500).send({ desc: err });
 			});
 	};
@@ -25,12 +24,14 @@ module.exports = function() {
 
 	var _funcGetLightId = function(req, res) {
 		var id = req.params.id;
+		log.info('id', id);
 		LightController.getLightId(id)
 			.then((data) => {
+				log.info({ data: data });
 				res.status(200).send(data);
 			})
 			.catch((err) => {
-				console.log('err getListLight [' + err + ']');
+				log.error('get_light/[' + id + ']', err.message);
 				res.status(500).send({ desc: err });
 			});
 	};
