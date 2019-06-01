@@ -1,27 +1,27 @@
 {
-  "name": "pleiades-server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/daureslaurent/PleiadesProject.git"
-  },
-  "author": "dauresl",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/daureslaurent/PleiadesProject/issues"
-  },
-  "homepage": "https://github.com/daureslaurent/PleiadesProject#readme",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "bunyan": "^1.8.12",
-    "express": "^4.17.0",
-    "express-session": "^1.16.1",
-    "mongoose": "^5.5.11",
-    "mqtt": "^3.0.0"
-  }
+	"name": "pleiades-server",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/daureslaurent/PleiadesProject.git"
+	},
+	"author": "dauresl",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/daureslaurent/PleiadesProject/issues"
+	},
+	"homepage": "https://github.com/daureslaurent/PleiadesProject#readme",
+	"dependencies": {
+		"body-parser": "^1.19.0",
+		"bunyan": "^1.8.12",
+		"express": "^4.17.0",
+		"express-session": "^1.16.1",
+		"mongoose": "^4.11.9",
+		"mqtt": "^3.0.0"
+	}
 }
