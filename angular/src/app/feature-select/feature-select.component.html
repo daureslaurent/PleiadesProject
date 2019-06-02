@@ -1,0 +1,7 @@
+<div *ngIf="featureId!=undefined" class="card card_window">
+  <div class="btn-group-vertical" role="group">
+    <button *ngFor="let feature of listFeatures" type="button" 
+    class="btn"[ngClass]="(feature.id==currentFeature)?(isFeatureActive)?'btn-success':'btn-info':'btn-secondary'" 
+    (click)="changeMenu(feature.id)">{{feature.name}}</button>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+.card-logo {
+	width: 64px;
+	height: 64px;
+	border-radius: 16px;
+	background-color: cornsilk;
+	margin-bottom: 15px;
+	margin-right: 5px;
+}
+
+.card-aft-logo {
+	display: contents;
+}
+
+th {
+	padding: 2px;
+	padding-right: 15px;
+}

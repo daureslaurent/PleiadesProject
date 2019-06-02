@@ -1,4 +1,21 @@
+
+
 <div class="container">
+
+  <div *ngIf="isOnErr">
+    <div class="text-center">
+      <button class="btn btn-danger" type="button" disabled>{{errMsg}}</button>
+    </div>
+  </div>
+  <div *ngIf="isOnwaiting">
+    <div class="text-center">
+      <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
+    </div>
+  </div>
+
   <div *ngIf="listLight" class="row">
     <div *ngFor="let listLight of listLight" class="lightcard col-md-12 col-lg-6">
       <div class="card" [ngClass]="(listLight.connected==true)?'border-success':'border-danger'">

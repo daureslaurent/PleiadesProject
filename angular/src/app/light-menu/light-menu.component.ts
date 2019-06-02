@@ -9,12 +9,33 @@ import { DataNetworkService } from '../data-network.service';
 export class LightMenuComponent implements OnInit {
 	listLight: Object;
 
+	//Err
+	isOnErr: Boolean = false;
+	errMsg: String = '';
+
+	//Waiting
+	isOnwaiting: Boolean = true;
+
 	constructor(private net: DataNetworkService) {}
 
 	ngOnInit() {
-		this.net.getListLight().subscribe((data) => {
-			this.listLight = data;
-			console.log(data);
-		});
+		this.loadData();
+	}
+
+	loadData() {
+		this.net.getListLight().subscribe(
+			(data) => {
+				this.listLight = data;
+				this.isOnwaiting = false;
+				this.isOnErr = false;
+				this.errMsg = '';
+			},
+			(err) => {
+				console.error('Err getListLight', err);
+				this.isOnwaiting = false;
+				this.errMsg = 'Erreur de connection';
+				this.isOnErr = true;
+			}
+		);
 	}
 }

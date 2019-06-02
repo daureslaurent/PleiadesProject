@@ -1,0 +1,6 @@
+<div class="card text-center card_window" id="card_window">
+  <div *ngIf="brightness!=undefined" class="card-body">
+    <app-brightness-slider (changeBrightnessEvent)="onChangeBrightness($event)" [brightness]="brightness"></app-brightness-slider>
+  </div>
+  <br>
+</div>

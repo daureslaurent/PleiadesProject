@@ -1,3 +1,89 @@
-<p>
-  board-light works!
-</p>
+<div *ngIf="isWaiting" class="container">
+  <div class="text-center">
+    <button class="btn btn-primary" type="button" disabled>
+      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      Loading...
+    </button>
+  </div>
+</div>
+
+<div *ngIf="isOnError" class="container">
+    <div class="text-center">
+      <button class="btn btn-danger" type="button" disabled>{{errMsg}}</button>
+    </div>
+</div>
+
+<div *ngIf="!isOnError && !isWaiting" class="container">
+  <div class="row">
+    
+    <div class="col-sm-12 col-md-7">
+      <div class="card card_window">
+        <div class="card-body">
+          <img class="card-logo" src="assets/img/light_buble.png">
+          <h3 class="card-aft-logo">
+              {{ l_name }}
+            <small class="text-muted">{{l_hardware}}</small>
+          </h3>
+          <tr>
+            <th>Status</th>
+            <td><span class="badge badge-pill" 
+              [ngClass]="(l_isConnected)?'badge-success':'badge-danger'">
+              {{(l_isConnected==true)?'Connected':'Disconnected'}}
+            </span></td>
+          </tr>
+          <tr>
+            <th>Playing</th>
+            <td><small>Color</small></td>
+          </tr>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-5">
+      <div class="card card_window">
+        <div class="card-body">
+          <img class="card-logo" src="assets/img/wifi_signal.png">
+          <h3 class="card-aft-logo">Wifi</h3>
+          <tr>
+            <th>SSID</th>
+            <td><small>{{l_ssid}}</small></td>
+          </tr>
+          <tr>
+            <th>Signal</th>
+            <td><small>{{l_signal}}</small></td>
+          </tr>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+
+  <br>
+
+  <div class="row">
+      <div class="col-sm-12 col-md-3">
+        <app-feature-select
+        (changeFeatureEvent)="onUpdateFeature($event)" 
+        [current-feature]="l_feature"
+        ></app-feature-select>
+      </div>
+      <!-- FEATURES -->
+      <div *ngIf="l_feature===0" class="col-sm-12 col-md-9">
+        <app-picker-color
+        [id]="id"></app-picker-color>
+      </div>
+  
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div *ngIf="l_brightness!=undefined" class="col">
+        <app-light-settings 
+        [brightness]="l_brightness"
+        (changeBrightnessEvent)="onUpdateBrightness($event)" 
+        ></app-light-settings>
+      </div>
+    </div>
+
+</div>
