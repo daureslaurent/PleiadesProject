@@ -20,6 +20,12 @@ export class DataNetworkService {
 	}
 
 	setBrightness(id, brightness) {
-		this.http.put(this.url + '/api/set_brightness', { id: id, brightness: brightness }).subscribe((ret) => {});
+		this.http.post(this.url + '/api/set_brightness', { id: id, brightness: brightness }).subscribe((ret) => {});
+	}
+
+	setColor(id, color) {
+		this.http
+			.post(this.url + '/api/set_color', { r: color.r, g: color.g, b: color.b, id: id })
+			.subscribe((ret) => {});
 	}
 }

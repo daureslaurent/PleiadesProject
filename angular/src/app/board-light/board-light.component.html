@@ -70,7 +70,9 @@
       <!-- FEATURES -->
       <div *ngIf="l_feature===0" class="col-sm-12 col-md-9">
         <app-picker-color
-        [id]="id"></app-picker-color>
+        [id]="id"
+        (changeColorEvent)="onUpdateColor($event)" 
+        ></app-picker-color>
       </div>
   
     </div>
@@ -81,7 +83,7 @@
       <div *ngIf="l_brightness!=undefined" class="col">
         <app-light-settings 
         [brightness]="l_brightness"
-        (changeBrightnessEvent)="onUpdateBrightness($event)" 
+        (changeBrightness)="onUpdateBrightness($event)" 
         ></app-light-settings>
       </div>
     </div>

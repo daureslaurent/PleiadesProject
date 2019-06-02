@@ -1,1 +1,8 @@
-{{brightness}}
+<div class="row" style="height: 300px">
+    <div class="col-2" style="height: 100%">
+        <small>Brightness</small>
+        <div class="custom-slider" style="height: 100%">
+            <ng5-slider  [(value)]="brightness" [options]="verticalSlider1.options" (userChange)="onUserChange($event)" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
+        </div>
+    </div>
+</div>

@@ -41,7 +41,7 @@ exports.createClient = function() {
 				var data = JSON.parse(message);
 				cmdList.forEach((element) => {
 					if (data.cmd === element.cmdParser()) {
-						log.info('[' + data.cmd + ']:[' + data.name + '][' + data.serialId + ']');
+						//log.info('[' + data.cmd + ']:[' + data.name + '][' + data.serialId + ']');
 						element.exec(data, client);
 					}
 				});
@@ -57,7 +57,6 @@ exports.createClient = function() {
 		senderMQQT.sendIdent(client);
 		setTimeout(() => {
 			UpdateStatus.updateStatus();
-			log.info('Update Status');
 		}, 3 * 1000);
 	};
 	setInterval(functAutoSendIdent, 10 * 1000);

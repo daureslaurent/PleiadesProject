@@ -15,8 +15,7 @@ export class FeatureSelectComponent implements OnInit {
 
 	listFeatures: object = [
 		{ name: 'color', id: 0, status: false, disable: true },
-		{ name: 'weather', id: 1, status: false, disable: false },
-		{ name: 'flash', id: 2, status: false, disable: true }
+		{ name: 'weather', id: 1, status: false, disable: false }
 	];
 
 	currentOption;

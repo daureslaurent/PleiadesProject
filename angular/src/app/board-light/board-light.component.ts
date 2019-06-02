@@ -81,4 +81,9 @@ export class BoardLightComponent implements OnInit {
 		this.net.setBrightness(this.l_id, brightness);
 		this.l_brightness = brightness;
 	}
+
+	onUpdateColor(color) {
+		console.log(color);
+		this.net.setColor(this.l_id, color);
+	}
 }
