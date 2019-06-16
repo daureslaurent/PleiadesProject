@@ -50,7 +50,7 @@
           </tr>
           <tr>
             <th>Signal</th>
-            <td><small>{{l_signal}}</small></td>
+            <td><small>{{l_signal}} %</small></td>
           </tr>
         </div>
       </div>
@@ -70,7 +70,7 @@
       <!-- FEATURES -->
       <div *ngIf="l_feature===0" class="col-sm-12 col-md-9">
         <app-picker-color
-        [id]="id"
+        [color]="l_color"
         (changeColorEvent)="onUpdateColor($event)" 
         ></app-picker-color>
       </div>

@@ -23,7 +23,6 @@ export class FeatureSelectComponent implements OnInit {
 	constructor(private net: DataNetworkService) {}
 
 	ngOnInit() {
-		console.log(this);
 		this.changeMenu(this.featureId);
 	}
 

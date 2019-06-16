@@ -7,7 +7,7 @@ import iro from '@jaames/iro';
 	styleUrls: [ './picker-color.component.css' ]
 })
 export class PickerColorComponent implements OnInit {
-	@Input('base-color') public oriColor;
+	@Input('color') public oriColor;
 	@Output() public changeColorEvent = new EventEmitter();
 
 	nameFeature: String = 'Color Picker';

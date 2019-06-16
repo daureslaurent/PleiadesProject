@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataNetworkService } from '../data-network.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-board-light',
@@ -10,6 +11,7 @@ import { DataNetworkService } from '../data-network.service';
 export class BoardLightComponent implements OnInit {
 	constructor(private route: ActivatedRoute, private net: DataNetworkService) {}
 	id: String;
+	subscription: Subscription;
 	private sub: any;
 
 	//lightData: Object;
@@ -27,25 +29,29 @@ export class BoardLightComponent implements OnInit {
 	l_signal: String;
 	l_hardware: String;
 	l_feature: Number = 0;
+	l_color: Object;
 
 	l_brightness: Number;
 
 	ngOnInit() {
 		this.sub = this.route.params.subscribe((params) => {
 			this.id = params['id'];
+			this.isWaiting = true;
 			this.loadData();
 		});
+
+		//Update light data
+		this.subscription = interval(5 * 1000).subscribe((val) => this.loadData());
 	}
 
-	ngOnDestroy() {
-		this.sub.unsubscribe();
+	updateData() {
+		console.log('updateData');
+		this.loadData();
 	}
 
 	loadData() {
-		this.isWaiting = true;
 		this.net.getDataLight(this.id).subscribe(
 			(data) => {
-				console.log(data);
 				//this.lightData = data;
 				this.mappingData(data);
 				this.isWaiting = false;
@@ -66,11 +72,18 @@ export class BoardLightComponent implements OnInit {
 		this.l_name = data.name;
 		this.l_id = data.id;
 
+		this.l_color = data.color;
 		this.l_brightness = data.brightness;
 
-		this.l_ssid = 'MyWifi';
-		this.l_signal = '-20';
+		this.l_ssid = data.ssid;
+		this.l_signal = String(this.convertWifiSignal(data.signal));
 		this.l_hardware = 'ESP32';
+	}
+
+	convertWifiSignal(signal) {
+		if (signal < -92) return 1;
+		else if (signal > -21) return 100;
+		else return '' + Math.round(-0.0154 * signal * signal - 0.3794 * signal + 98.182);
 	}
 
 	onUpdateFeature(feature) {
@@ -83,7 +96,13 @@ export class BoardLightComponent implements OnInit {
 	}
 
 	onUpdateColor(color) {
-		console.log(color);
+		console.log('onUpdateColor ' + color);
+		this.l_color = color;
 		this.net.setColor(this.l_id, color);
+	}
+
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
+		this.sub.unsubscribe();
 	}
 }
