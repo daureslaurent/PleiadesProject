@@ -69,6 +69,19 @@ exports.setBrightness = function(id, brightness) {
 	});
 };
 
+exports.setPower = function(id, power) {
+	return new Promise((resolve, reject) => {
+		LightDB.update({ _id: id }, { $set: { power: power } })
+			.exec()
+			.then((data) => {
+				resolve();
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+};
+
 exports.createUpdateFromIdent = function(identData) {
 	var serialId = identData.serialId;
 
@@ -79,16 +92,22 @@ exports.createUpdateFromIdent = function(identData) {
 		}
 		if (light) {
 			//Update Light
-			var color = identData.led.color;
-			light.color = color;
+			light.color = identData.led.color;
 			light.lastUpTime = Date.now();
+
+			//Update WIFI
+			var wifi = {
+				signal: identData.wifi.signal,
+				name: identData.wifi.ssid
+			};
+			light.ssid = wifi;
 
 			light.save(function(err, light) {});
 		} else {
 			// New Light
 			log.info('Create new light', identData);
 			var newLight = new LightDB();
-			newLight.name = identData.name;
+			newLight.name = serialId;
 			newLight.deviceId = serialId;
 			newLight.color = identData.led.color;
 			newLight.brightness = 30;

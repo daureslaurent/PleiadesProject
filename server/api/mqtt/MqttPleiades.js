@@ -16,9 +16,12 @@ exports.sendBrightness = function(id, value) {
 	senderMQQT.sendBrightness(id, value, client);
 };
 
+exports.sendPower = function(id, power) {
+	senderMQQT.sendPower(id, power, client);
+};
+
 exports.createClient = function() {
 	var topicServer = 'ledlamp/server';
-	var topicControl = 'ledlamp/ctrl';
 
 	//CMD MQTT
 	var cmdList = new Array();
@@ -30,7 +33,6 @@ exports.createClient = function() {
 	client.on('connect', function() {
 		//Subscribe topic
 		client.subscribe(topicServer);
-		client.subscribe(topicControl);
 		log.info('connected & subscribe');
 	});
 
@@ -57,7 +59,7 @@ exports.createClient = function() {
 		senderMQQT.sendIdent(client);
 		setTimeout(() => {
 			UpdateStatus.updateStatus();
-		}, 3 * 1000);
+		}, 60 * 1000);
 	};
 	setInterval(functAutoSendIdent, 10 * 1000);
 

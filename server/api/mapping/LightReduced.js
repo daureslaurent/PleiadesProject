@@ -23,7 +23,9 @@ exports.mappingOne = function(rawData) {
 		brightness: rawData.brightness,
 		connected: rawData.connected,
 		deviceId: rawData.deviceId,
-		color: rawData.color
+		color: rawData.color,
+		ssid: rawData.ssid.name,
+		signal: rawData.ssid.signal
 	};
 
 	return final;

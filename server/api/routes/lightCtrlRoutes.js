@@ -51,6 +51,28 @@ module.exports = function(mqttClient) {
 	});
 
 	//SetPower
+	var _funcSendPower = function(req, res) {
+		if (req.body.power != undefined) {
+			var power = req.body.power === true;
+			var id = req.body.id;
+
+			//Update DB brigtness
+			LightController.setPower(id, power)
+				.then(() => {
+					mqttClient.sendPower(id, power);
+					res.status(204).send();
+				})
+				.catch((err) => {
+					log.error('set_power', err.message);
+					res.status(500).send();
+				});
+		}
+	};
+	routesList.push({
+		path: 'set_power',
+		funct: _funcSendPower,
+		mode: 'post'
+	});
 
 	return routesList;
 };
