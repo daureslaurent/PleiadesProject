@@ -4,6 +4,7 @@
 // see https://github.com/espressif/arduino-esp32/blob/master/libraries/Preferences/examples/StartCounter/StartCounter.ino
 
 #define AP_NAME "pleiades-pre"
+#define SW_MAX_WIFI 30
 
 WiFiClient myclient;
 WiFiServer server(80);
@@ -34,7 +35,7 @@ String webserver_GetRequestGETParameter()
             { // if there's bytes to read from the client,
 
                 char c = myclient.read(); // read a byte, then
-                Serial.write(c);          // print it out the serial monitor
+                //Serial.write(c);          // print it out the serial monitor
 
                 if (c == '\n')
                 { // if the byte is a newline character
@@ -66,7 +67,6 @@ String webserver_GetRequestGETParameter()
                 // we see a "GET /?" in the HTTP data of the client request
                 // user entered ADDRESS/?xxxx in webbrowser, xxxx = GET Parameter
                 {
-
                     GETParameter = currentLine.substring(currentLine.indexOf('?') + 1, currentLine.indexOf(' ', 6)); // extract everything behind the ? and before a space
                 }
 
@@ -76,6 +76,11 @@ String webserver_GetRequestGETParameter()
                 {
                     int IndexOfBlank = currentLine.indexOf(' ');
                     WebRequestHostAddress = currentLine.substring(IndexOfBlank + 1, currentLine.length()); // extract everything behind the space character and store Server IP-Address of HTTP-Request
+                }
+
+                if (currentLine.indexOf("bootstrap.css") > 0)
+                {
+                    GETParameter = "BOOTSTRAP_CMD";
                 }
             }
         }
@@ -92,26 +97,70 @@ void Webserver_SendHTMLPage(String HTMLPage)
 
     // begin with HTTP response header
     httpResponse += "HTTP/1.1 200 OK\r\n";
-    httpResponse += "Content-type:text/html\r\n\r\n";
-
-    // then the HTML page
-    httpResponse += HTMLPage;
+    httpResponse += "Content-type: text/html\r\n\r\n";
 
     // The HTTP response ends with a blank line:
-    httpResponse += "\r\n";
+    HTMLPage += "\r\n";
 
     // send it out to TCP/IP client = webbrowser
-    myclient.println(httpResponse);
+    myclient.write((const uint8_t *)httpResponse.c_str(), httpResponse.length());
+    Serial.printf("size[%d]\n", httpResponse.length());
 
+    myclient.write((const uint8_t *)HTMLPage.c_str(), HTMLPage.length());
+    Serial.printf("size[%d]\n", HTMLPage.length());
+
+    //for (int i = 0; i <= httpResponse.length(); i++)
+    //{
+    //    myclient.write(httpResponse.c_str());
+    //}
+    delay(50);
     // close the connection
     myclient.stop();
 
     Serial.println("Client Disconnected.");
 };
 
-// +++++++++++++++++++ End of Webserver library +++++++++++++++++++++
+void Webserver_SendBootstrap()
+{
+    String httpResponse = "";
+    String httpEndResponse = "\r\n";
 
-// +++++++++++++++++++ Start of WiFi Library ++++++++++++++++++++++++
+    // begin with HTTP response header
+    httpResponse += "HTTP/1.1 200 OK\r\n";
+    httpResponse += "Content-type: text/css\r\n\r\n";
+
+    // The HTTP response ends with a blank line:
+
+    // send it out to TCP/IP client = webbrowser
+    myclient.write((const uint8_t *)httpResponse.c_str(), httpResponse.length());
+    Serial.printf("size[%d]\n", httpResponse.length());
+
+    //SendBootStrap plitted
+    myclient.write(getBootstrap_1().c_str());
+    myclient.write(getBootstrap_2().c_str());
+    myclient.write(getBootstrap_3().c_str());
+    myclient.write(getBootstrap_4().c_str());
+    myclient.write(getBootstrap_5().c_str());
+    myclient.write(getBootstrap_6().c_str());
+    myclient.write(getBootstrap_7().c_str());
+    myclient.write(getBootstrap_8().c_str());
+    myclient.write(getBootstrap_9().c_str());
+    myclient.write(getBootstrap_10().c_str());
+    myclient.write(getBootstrap_11().c_str());
+    myclient.write(getBootstrap_12().c_str());
+    myclient.write(getBootstrap_13().c_str());
+    myclient.write(getBootstrap_14().c_str());
+    myclient.write(getBootstrap_15().c_str());
+
+    //Send end req
+    myclient.write((const uint8_t *)httpEndResponse.c_str(), httpEndResponse.length());
+
+    delay(50);
+    // close the connection
+    myclient.stop();
+
+    Serial.println("Client Disconnected.");
+};
 
 // Connect to router network and return 1 (success) or -1 (no success)
 int connectWifi(char *txtSSID, char *txtPassword)
@@ -182,8 +231,6 @@ void startAccessPoint(char *AccessPointNetworkSSID)
     Serial.println(WiFi.softAPIP());
 }
 
-// +++++++++++++++++++ End of WiFi Library +++++++++++++++++++
-
 String getValueSplit(String data, char separator, int index)
 {
     int found = 0;
@@ -208,7 +255,6 @@ int setConfigParams(String GETParameter)
 
     int count = 0;
     int countP = 0;
-    Serial.printf("GETDATA==[%s]\n", const_cast<char *>(GETParameter.c_str()));
 
     // count params
     int indexString = 0;
@@ -216,21 +262,14 @@ int setConfigParams(String GETParameter)
     {
         indexString = GETParameter.indexOf('=', indexString);
         count++;
-        Serial.printf("indexString [%d]\n", indexString);
         indexString == -1 ? -1 : indexString++;
-        Serial.printf("indexString [%d]\n", indexString);
     }
-
-    Serial.printf("params found [%d]\n", count);
 
     while (countP < count)
     {
 
         String name = getValueSplit(getValueSplit(GETParameter, '&', countP), '=', 0);
         String value = getValueSplit(getValueSplit(GETParameter, '&', countP), '=', 1);
-
-        Serial.printf("inParam[%s]\n", const_cast<char *>(name.c_str()));
-        Serial.printf("inParam[%s]\nn", const_cast<char *>(value.c_str()));
 
         if (name.equals("ssid"))
         {
@@ -256,6 +295,35 @@ void setConfigValueRAM(String ssidval, String pass, String mqtt)
     mqtt_server = mqtt;
 }
 
+int SW_nn = 0;
+String SW_name[SW_MAX_WIFI];
+int SW_signal[SW_MAX_WIFI];
+void scanWifi()
+{
+    delay(1000);
+    WiFi.mode(WIFI_STA);
+    //WiFi.disconnect();
+    int n = WiFi.scanNetworks();
+    Serial.println("scan done");
+    if (n == 0)
+    {
+        Serial.println("no networks found");
+    }
+    else
+    {
+        Serial.print(n);
+        Serial.println(" networks found");
+        if (n > SW_MAX_WIFI)
+            n = SW_MAX_WIFI;
+        SW_nn = n;
+        for (int i = 0; i < n; ++i)
+        {
+            SW_name[i] = (WiFi.encryptionType(i) == WIFI_AUTH_OPEN) ? WiFi.SSID(i) + "-open" : WiFi.SSID(i);
+            SW_signal[i] = WiFi.RSSI(i);
+        }
+    }
+}
+
 boolean setupWifiConfig()
 {
     preferences.begin("pleiades", false);
@@ -275,8 +343,10 @@ boolean setupWifiConfig()
     Serial.printf("Pass %s\n", txtPassword);
     Serial.printf("MQTT %s\n", txtMQTT);
 
+    //setConfigValueRAM(wifiSSID, wifiPassword, hostMQTT);
     setConfigValueRAM(wifiSSID, wifiPassword, hostMQTT);
 
+    scanWifi();
     //Station + AccesPoint
     WiFi.mode(WIFI_AP_STA);
 
@@ -287,6 +357,7 @@ boolean setupWifiConfig()
         return true;
     else
     {
+        OneAfterOneFast(CRGB::Red);
         //Start WifiConfig
         startAccessPoint(AP_NAME);
 
@@ -308,9 +379,16 @@ void loopWifiConfig()
             //set config from get Request
             int countValues = setConfigParams(GETParameter);
         }
-
-        // Send page connection
-        Webserver_SendHTMLPage(getPageConfiWifi());
+        if (GETParameter.equals("BOOTSTRAP_CMD"))
+        {
+            //BOOTSTRAP
+            Webserver_SendBootstrap();
+        }
+        else
+        {
+            // Send page connection
+            Webserver_SendHTMLPage(getPageWifiSet());
+        }
     }
 
     delay(50);

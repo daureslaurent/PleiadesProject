@@ -6,6 +6,8 @@ void setupLed()
   // set master brightness control
   FastLED.setBrightness(SETUP_BRIGHTNESS);
   FastLED.setTemperature(Tungsten100W);
+
+  AllOnShow(CRGB::Black);
 }
 
 void AllOnShow(CRGB color)

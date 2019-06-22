@@ -2,59 +2,112 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="bootstrap.css">
   <title>Pleiades config</title>
 
-  <script>
-
-  </script>
-
-  <style>
-    .center {
-      margin-left: auto;
-      margin-right: auto;
-      
-      padding: 15px;
-    }
-
-    .block_wifiscan {
-      padding: 15px;
-      background-color: aqua;
-      width: 500px;
-    }
-
-    .block_config {
-      padding: 15px;
-      background-color: lightgrey;
-      width: 200px;
-    }
-  </style>
-
 </head>
-<body>
-
-  <div class="block_wifiscan center">
-    <h2>Ingrédients</h2>
-    <ul>
-      <li>2 avocats (pelés et avec les noyaux retirés)</li>
-      <li>le jus d'un citron</li>
-      <li>¼ de concombre, coupé grossièrement</li>
-      <li>1 petite tomate, coupée</li>
-    </ul>
-  </div>
-
+<body style="background-color: lightgrey">
   <br>
+  <div class="container-fluid">
+    <br>
+    <div class="card mx-auto" style="width: 18rem;">
+      <div class="card-header">Pleiades Config</div>
+      <div id="alert"></div>
+      <div class="card-body">
+        <div class="card-content">
+          <form id="configForm" action="./" method="get">
+            <div id='scanList'></div>
 
-  <div class="block_config center">
-    <form action="./" method="get">
-      SSID:<br>
-      <input type="text" name="ssid" value=""><br>
-      Password:<br>
-      <input type="text" name="password" value=""><br>
-      MQTT Host:<br>
-      <input type="text" name="mqtt" value=""><br><br>
-      <input type="submit" value="Submit">
-    </form>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+              </div>
+              <input type="password" id="iPass" class="form-control" placeholder="Password" name="password">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+              </div>
+              <input type="text" id="iMqtt" class="form-control" placeholder="MQTT Host" name="mqtt">
+            </div>
+
+            <div class="text-center">
+              <div class="btn btn-outline-primary" onclick="sendForm()">OK</div>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+
+
   </div>
-    
 </body>
 </html>
+
+<script>
+  function addWifi(name, signal){
+    var input0 = document.createElement('div');
+    input0.setAttribute('class', 'input-group mb-3');
+
+    var input1 = document.createElement('div');
+    input1.setAttribute('class', 'input-group-prepend');
+
+    var input2 = document.createElement('div');
+    input2.setAttribute('class', 'input-group-text');
+
+    //Radiobtn
+    var i2Input = document.createElement('input');
+    i2Input.setAttribute('type', 'radio');
+    i2Input.setAttribute('name', 'ssid');
+    i2Input.setAttribute('value', name);
+    i2Input.setAttribute('onchange', 'onCheckWifi()');
+
+    var label = document.createElement('label');
+    label.setAttribute('class', 'form-control');
+    label.innerHTML = name + ' : ' + signal;
+
+    input2.appendChild(i2Input);
+    input1.appendChild(input2);
+    input0.appendChild(input1);
+    input0.appendChild(label);
+
+    document.getElementById('scanList').appendChild(input0);
+  }
+
+  var checkWifi = false;
+  function onCheckWifi(){
+    checkWifi = true;
+  }
+
+  function sendForm(){
+
+    //check wifi/pass/mqtt
+    var checkPass = (document.getElementById("iPass").value)?true:false;
+    var checkMQTT = (document.getElementById("iMqtt").value)?true:false;
+    console.log(checkWifi, checkPass, checkMQTT);
+
+    //clean
+    document.getElementById("alert").innerHTML = "";
+
+    //showAlert
+    if (!checkWifi || !checkPass || !checkMQTT){
+      var textAlert = "";
+      textAlert += (!checkWifi)?'Wifi ':'';
+      textAlert += (!checkPass)?'Password ':'';
+      textAlert += (!checkMQTT)?'MQTT Host ':'';
+
+      //create alert
+      var alert = document.createElement('div');
+      alert.setAttribute('class', 'alert alert-danger');
+      alert.setAttribute('role', 'alert');
+      alert.innerHTML = "Need "+textAlert;
+      document.getElementById("alert").appendChild(alert);
+    }
+    else {
+      document.getElementById("configForm").submit();
+    }
+  }
+</script>
