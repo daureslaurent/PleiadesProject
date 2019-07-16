@@ -10,5 +10,5 @@ MQTT broker needed.
 
 ## Config file
 
-The config file locate to ./api/config.json
+The config file locate to `./api/config.json`
 There is the "API" port, mongoDB endpoint and the MQTT endpoint
